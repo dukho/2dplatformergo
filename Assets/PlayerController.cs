@@ -5,14 +5,17 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
+    private Collider2D coll;
+    [SerializeField] private LayerMask ground;
 
-    private enum State { idle, running, jumping }
+    private enum State { idle, running, jumping, falling }
     private State state = State.idle;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
 	}
 	
 	// Update is called once per frame
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour {
             
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground)) {
             rb.velocity = new Vector2(rb.velocity.x, 10);
             state = State.jumping;
         }
@@ -43,7 +46,14 @@ public class PlayerController : MonoBehaviour {
     private void VelocityState() {
 
         if (state == State.jumping) {
-
+            if (rb.velocity.y < -.1f) {
+                state = State.falling;
+            }
+        }
+        else if (state == State.falling) {
+            if (coll.IsTouchingLayers(ground)) {
+                state = State.idle;
+            }
         }
         //note: Don't use 0 for comparison. Mathf.Epsilon is effectively zero in terms of float number
         else if (Mathf.Abs(rb.velocity.x) > 2f) {

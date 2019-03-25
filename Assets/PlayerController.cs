@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour {
     private Animator anim;
     private Collider2D coll;
     [SerializeField] private LayerMask ground;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpForce = 10f;
 
     private enum State { idle, running, jumping, falling }
     private State state = State.idle;
@@ -20,30 +22,35 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float hDirection = Input.GetAxis("Horizontal");
-
-        if (hDirection < 0) {
-            rb.velocity = new Vector2(-5, rb.velocity.y);
-            transform.localScale = new Vector2(-1, 1); // -1 for flipping sprite
-            
-        } else if (hDirection > 0) {
-            rb.velocity = new Vector2(5, rb.velocity.y);
-            transform.localScale = new Vector2(1, 1);
-            
-        } else {
-            
-        }
-
-        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground)) {
-            rb.velocity = new Vector2(rb.velocity.x, 10);
-            state = State.jumping;
-        }
-
-        VelocityState();
+        Movement();
+        AnimationState();
         anim.SetInteger("state", (int)state);
     }
 
-    private void VelocityState() {
+    private void Movement() {
+        float hDirection = Input.GetAxis("Horizontal");
+
+        // moving left
+        if (hDirection < 0) {
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
+            transform.localScale = new Vector2(-1, 1); // -1 for flipping sprite
+
+        }
+        // moving right
+        else if (hDirection > 0) {
+            rb.velocity = new Vector2(speed, rb.velocity.y);
+            transform.localScale = new Vector2(1, 1);
+
+        }
+
+        // jumping
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground)) {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            state = State.jumping;
+        }
+    }
+
+    private void AnimationState() {
 
         if (state == State.jumping) {
             if (rb.velocity.y < -.1f) {

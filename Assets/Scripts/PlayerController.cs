@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
+
+    public int cherries = 0;
+
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 10f;
@@ -25,6 +28,13 @@ public class PlayerController : MonoBehaviour {
         Movement();
         AnimationState();
         anim.SetInteger("state", (int)state);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.tag == "Collectable") {
+            cherries += 1;
+            Destroy(collision.gameObject);
+        }
     }
 
     private void Movement() {

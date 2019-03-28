@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
 
-    public int cherries = 0;
-
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 10f;
+    [SerializeField] private int cherries = 0;
+    [SerializeField] private Text cherryText;
 
     private enum State { idle, running, jumping, falling }
     private State state = State.idle;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour {
         if (collision.tag == "Collectable") {
             cherries += 1;
             Destroy(collision.gameObject);
+            cherryText.text = cherries.ToString();
         }
     }
 

@@ -44,8 +44,10 @@ public class PlayerController : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Enemy") {
+            Frog frog = other.gameObject.GetComponent<Frog>();
             if (state == State.falling) {
-                Destroy(other.gameObject);
+                //Destroy(other.gameObject);
+                frog.JumpedOn();
                 Jump();
             } else {
                 state = State.hurt;

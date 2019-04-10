@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Frog : MonoBehaviour {
+public class Frog : Enemy {
     [SerializeField] private float leftCap;
     [SerializeField] private float rightCap;
 
@@ -10,18 +10,16 @@ public class Frog : MonoBehaviour {
     [SerializeField] private float jumpHeight = 15f;
     [SerializeField] private LayerMask ground;
 
-    private Animator anim;
-
     private Collider2D coll;
     private Rigidbody2D rb;
 
     private bool facingLeft = true;
 
     // Use this for initialization
-    void Start () {
+    protected override void Start () {
+        base.Start();
         coll = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -78,11 +76,7 @@ public class Frog : MonoBehaviour {
         }
     }
 
-    public void JumpedOn() {
-        anim.SetTrigger("Death");
-    }
 
-    private void Death() {
-        Destroy(this.gameObject);
-    }
+
+
 }

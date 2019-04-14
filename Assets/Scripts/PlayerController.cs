@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
+    private AudioSource footstep;
 
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 5f;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        footstep = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -114,5 +116,9 @@ public class PlayerController : MonoBehaviour {
         } else {
             state = State.idle;
         }
+    }
+
+    private void Footstep() {
+        footstep.Play();
     }
 }

@@ -11,7 +11,6 @@ public class Frog : Enemy {
     [SerializeField] private LayerMask ground;
 
     private Collider2D coll;
-    private Rigidbody2D rb;
 
     private bool facingLeft = true;
 
@@ -19,7 +18,6 @@ public class Frog : Enemy {
     protected override void Start () {
         base.Start();
         coll = GetComponent<Collider2D>();
-        rb = GetComponent<Rigidbody2D>();
     }
 	
 	// Update is called once per frame

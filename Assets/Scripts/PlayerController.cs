@@ -7,14 +7,15 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
     private Animator anim;
     private Collider2D coll;
-    private AudioSource footstep;
-
+    
     [SerializeField] private LayerMask ground;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private int cherries = 0;
     [SerializeField] private Text cherryText;
     [SerializeField] private float hurtForce = 10f;
+    [SerializeField] private AudioSource cherry;
+    [SerializeField] private AudioSource footstep;
 
     private enum State { idle, running, jumping, falling, hurt }
     private State state = State.idle;
@@ -24,7 +25,6 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
-        footstep = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.tag == "Collectable") {
+            cherry.Play();
             cherries += 1;
             Destroy(collision.gameObject);
             cherryText.text = cherries.ToString();

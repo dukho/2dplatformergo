@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private int cherries = 0;
-    [SerializeField] private Text cherryText;
+    [SerializeField] private TextMeshProUGUI cherryTextPro;
     [SerializeField] private float hurtForce = 10f;
     [SerializeField] private AudioSource cherry;
     [SerializeField] private AudioSource footstep;
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour {
             cherry.Play();
             cherries += 1;
             Destroy(collision.gameObject);
-            cherryText.text = cherries.ToString();
+            cherryTextPro.text = cherries.ToString();
         }
     }
 

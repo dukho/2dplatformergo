@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     private Rigidbody2D rb;
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float hurtForce = 10f;
     [SerializeField] private AudioSource cherry;
     [SerializeField] private AudioSource footstep;
+    [SerializeField] private int health;
+    [SerializeField] private Text healthAmount;
 
     private enum State { idle, running, jumping, falling, hurt }
     private State state = State.idle;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        healthAmount.text = health.ToString();
 	}
 	
 	// Update is called once per frame
@@ -43,6 +47,11 @@ public class PlayerController : MonoBehaviour {
             cherries += 1;
             Destroy(collision.gameObject);
             cherryTextPro.text = cherries.ToString();
+        } else if (collision.tag == "Powerup") {
+            Destroy(collision.gameObject);
+            jumpForce = 25f;
+            GetComponent<SpriteRenderer>().color = Color.yellow;
+            StartCoroutine(ResetPower());
         }
     }
 
@@ -55,15 +64,25 @@ public class PlayerController : MonoBehaviour {
                 Jump();
             } else {
                 state = State.hurt;
+                HandleHealth(); // deals with health update ui resets level if health < 0
                 if (other.gameObject.transform.position.x > transform.position.x) {
                     // enemy is to my right: get damage, move to the left
                     rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
-                } else {
+                }
+                else {
                     // enemy is to my left: get damage, move to the right
                     rb.velocity = new Vector2(hurtForce, rb.velocity.y);
                 }
             }
-            
+
+        }
+    }
+
+    private void HandleHealth() {
+        health -= 1;
+        healthAmount.text = health.ToString();
+        if (health <= 0) {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -122,5 +141,11 @@ public class PlayerController : MonoBehaviour {
 
     private void Footstep() {
         footstep.Play();
+    }
+
+    private IEnumerator ResetPower() {
+        yield return new WaitForSeconds(5);
+        jumpForce = 15;
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

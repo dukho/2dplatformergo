@@ -987,6 +987,11 @@ Prefab:
       propertyPath: healthAmount
       value: 
       objectReference: {fileID: 665282636}
+    - target: {fileID: 61098567555219844, guid: 1987e36b1359ce64b88f8e3b66d80fe9,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: e8f94b2bf79e73c418526e1dd7aeafaa, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1987e36b1359ce64b88f8e3b66d80fe9, type: 2}
   m_IsPrefabAsset: 0
